@@ -3,16 +3,17 @@
     <h1>Todo App</h1>
     <hr>
     <div class="task-container">
-      <div class="task" v-for="n in 3" :key="n.value">
-        <h3 class="task-heading">Task {{n}}</h3>
+      <!-- <div class="task" v-for="(task, index) in tasks" :key="task">
+        <h3 class="task-heading">{{task.name}}</h3>
         <hr>
         <strong>Description:</strong><br/>
-        This is a fun task! Task number {{n}}.
+        {{task.description}}
         <div class="control-buttons">
           <button class="completed-button">Mark Completed</button>
-          <button class="delete-button">Delete Task</button>
+          <button class="delete-button" @click="deleteTask(index)">Delete Task</button>
         </div>
-      </div>
+      </div> -->
+      <TaskComponent v-for="(task, index) in tasks" :key="task" :task="task" :index="index"/>
     </div>
     <hr>
     <div class="task">
@@ -23,15 +24,33 @@
         Enter description for new task.
         </div>
         <div class="control-buttons">
-          <button class="add-task-button">Add Task</button>
+          <button class="add-task-button" @click="addTask()">Add Task</button>
         </div>
       </div>
   </div>
 </template>
 
 <script>
+import TaskComponent from './components/TaskComponent.vue';
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    TaskComponent
+  },
+  data() {
+    return {
+      tasks: []
+    };
+  },
+  methods: {
+    addTask() {
+      this.tasks.push({ name: 'test', description: 'testing' });
+    },
+    deleteTask(index) {
+      this.tasks.splice(index, 1);
+    }
+  }
 }
 </script>
 
@@ -50,9 +69,10 @@ body {
 }
 
 .task-container {
-  height: 250px;
+  min-height: 250px;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
 }
 
