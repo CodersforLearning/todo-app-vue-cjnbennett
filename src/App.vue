@@ -3,25 +3,15 @@
     <h1>Todo App</h1>
     <hr>
     <div class="task-container">
-      <!-- <div class="task" v-for="(task, index) in tasks" :key="task">
-        <h3 class="task-heading">{{task.name}}</h3>
-        <hr>
-        <strong>Description:</strong><br/>
-        {{task.description}}
-        <div class="control-buttons">
-          <button class="completed-button">Mark Completed</button>
-          <button class="delete-button" @click="deleteTask(index)">Delete Task</button>
-        </div>
-      </div> -->
-      <TaskComponent v-for="(task, index) in tasks" :key="task" :task="task" :index="index"/>
+      <Task v-for="(task, index) in tasks" :key="task" :task="task" :index="index"/>
     </div>
     <hr>
     <div class="task">
-        <h3 class="task-heading" contenteditable="true">New Task</h3>
+        <h3 class="task-heading" contenteditable="true" id="new-task-heading">{{default_task_heading}}</h3>
         <hr>
         <strong>Description:</strong><br/>
-        <div contenteditable="true">
-        Enter description for new task.
+        <div contenteditable="true" id="new-task-description">
+        {{default_task_description}}
         </div>
         <div class="control-buttons">
           <button class="add-task-button" @click="addTask()">Add Task</button>
@@ -31,24 +21,33 @@
 </template>
 
 <script>
-import TaskComponent from './components/TaskComponent.vue';
+import Task from './components/Task.vue';
 
 export default {
   name: 'App',
   components: {
-    TaskComponent
+    Task
   },
   data() {
     return {
-      tasks: []
+      tasks: [],
+      default_task_heading: 'New Task',
+      default_task_description: 'Enter description for new task.'
     };
   },
   methods: {
     addTask() {
-      this.tasks.push({ name: 'test', description: 'testing' });
+      let heading = document.getElementById('new-task-heading');
+      let description = document.getElementById('new-task-description');
+      this.tasks.push({ name: heading.innerText, description: description.innerText });
+      heading.innerText = this.default_task_heading;
+      description.innerText = this.default_task_description;
     },
     deleteTask(index) {
       this.tasks.splice(index, 1);
+    },
+    completeTask(index) {
+      document.getElementsByClassName('task')[index].className = 'task completed';
     }
   }
 }
@@ -85,6 +84,12 @@ body {
   font-size: 12px;
   padding: 5px;
   position: relative;
+}
+
+.completed {
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
+  text-decoration-color: red;
 }
 
 .task-heading {

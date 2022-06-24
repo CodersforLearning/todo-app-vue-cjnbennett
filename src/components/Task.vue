@@ -5,7 +5,7 @@
     <strong>Description:</strong><br/>
     {{task.description}}
     <div class="control-buttons">
-      <button class="completed-button">Mark Completed</button>
+      <button class="completed-button" @click="$parent.completeTask(index)">Mark Completed</button>
       <button class="delete-button" @click="$parent.deleteTask(index)">Delete Task</button>
     </div>
   </div>
